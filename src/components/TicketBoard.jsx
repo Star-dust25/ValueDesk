@@ -135,6 +135,9 @@ export default function TicketBoard() {
   const { data, isLoading, isError, error } = useTickets()
   const { mutate, isPending } = useSaveTickets()
   const { priorityFilter, setPriorityFilter, openNewTicket } = useUIStore()
+  const can = useCan()
+  const { role } = useSessionStore()
+  const canEdit = can('tickets:edit')
 
   // Borrador local SOLO durante el arrastre; fuera de él, la fuente de verdad es TanStack Query.
   const [draft, setDraft] = useState(null)
@@ -163,13 +166,14 @@ export default function TicketBoard() {
     : null
 
   function handleDragStart({ active }) {
+    if (!canEdit) return
     setActiveId(active.id)
     setDraft(groupByStatus(data))
   }
 
   // Mover entre columnas mientras se arrastra (feedback inmediato).
   function handleDragOver({ active, over }) {
-    if (!over) return
+    if (!canEdit || !over) return
     setDraft((prev) => {
       const from = findContainer(prev, active.id)
       const to = findContainer(prev, over.id)
@@ -187,6 +191,11 @@ export default function TicketBoard() {
 
   // Reordenar dentro de la columna y persistir (optimista) en Supabase.
   function handleDragEnd({ active, over }) {
+    if (!canEdit) {
+      setDraft(null)
+      setActiveId(null)
+      return
+    }
     let final = draft
     if (over && draft) {
       const container = findContainer(draft, active.id)
@@ -228,6 +237,11 @@ export default function TicketBoard() {
           ))}
         </div>
         <div className="board__right">
+          {!canEdit && (
+            <span className="muted text-xs" style={{ padding: '4px 8px', border: '1px solid var(--border)' }}>
+              Modo consulta ({role}) · Solo agentes pueden mover tickets
+            </span>
+          )}
           <span className={`board__sync ${isPending ? 'is-saving' : ''}`} aria-live="polite">
             {isPending ? 'Guardando…' : 'Sincronizado'}
           </span>
@@ -238,7 +252,7 @@ export default function TicketBoard() {
       </div>
 
       <DndContext
-        sensors={sensors}
+        sensors={canEdit ? sensors : []}
         collisionDetection={closestCorners}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
@@ -246,18 +260,25 @@ export default function TicketBoard() {
         onDragCancel={handleDragCancel}
         accessibility={{
           screenReaderInstructions: {
-            draggable: 'Pulsa Enter para ver el detalle. Pulsa espacio para tomar el ticket, flechas para moverlo y espacio para soltarlo.',
+            draggable: canEdit
+              ? 'Pulsa Enter para ver el detalle. Pulsa espacio para tomar el ticket, flechas para moverlo y espacio para soltarlo.'
+              : 'Pulsa Enter para ver el detalle.',
           },
         }}
       >
         <div className="board__columns">
           {STATUSES.map((s) => (
-            <Column key={s.id} status={s} tickets={visible(board[s.id] ?? [])} />
+            <Column
+              key={s.id}
+              status={s}
+              tickets={visible(board[s.id] ?? [])}
+              canEdit={canEdit}
+            />
           ))}
         </div>
 
         <DragOverlay dropAnimation={{ duration: 160, easing: 'ease-out' }}>
-          {activeTicket ? <TicketCard ticket={activeTicket} overlay /> : null}
+          {canEdit && activeTicket ? <TicketCard ticket={activeTicket} overlay /> : null}
         </DragOverlay>
       </DndContext>
     </div>
