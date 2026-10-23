@@ -46,17 +46,48 @@ function TicketDetailForm({ ticket, onDone }) {
   const can = useCan()
 
   const set = (k) => (e) => setValues((v) => ({ ...v, [k]: e.target.value }))
-  const titleError = values.title.trim().length < 3 ? 'Mínimo 3 caracteres.' : null
+  
+  // Validaciones rigurosas para edición de tickets
+  const titleTrim = (values.title || '').trim()
+  const descTrim = (values.description || '').trim()
+  
+  const titleError = !titleTrim
+    ? 'El título es obligatorio.'
+    : titleTrim.length < 5
+    ? 'El título debe tener al menos 5 caracteres.'
+    : titleTrim.length > 140
+    ? 'Máximo 140 caracteres.'
+    : /^[0-9]+$/.test(titleTrim)
+    ? 'No puede contener solo números.'
+    : null
+
+  const descError = !descTrim
+    ? 'La descripción es obligatoria.'
+    : descTrim.length < 10
+    ? `Detalla un poco más (${descTrim.length}/10 caracteres mínimos).`
+    : descTrim.length > 1000
+    ? 'Máximo 1000 caracteres.'
+    : null
+
+  const serviceError = (ticket.type === 'solicitud' || values.priority === 'alta') && !values.service
+    ? 'Debes seleccionar el servicio correspondiente.'
+    : null
+
+  const hasErrors = !!titleError || !!descError || !!serviceError
   const dirty = Object.entries(values).some(([k, v]) => (ticket[k] ?? '') !== v)
   const service = serviceById(values.service)
   const sla = slaInfo(ticket)
 
   function handleSave(e) {
     e.preventDefault()
-    if (titleError) return
+    if (hasErrors) {
+      showToast('Corrige los errores antes de guardar el ticket', 'error')
+      return
+    }
     const patch = {
       ...values,
-      title: values.title.trim(),
+      title: titleTrim,
+      description: descTrim,
       service: values.service || null,
       asset_id: values.asset_id || null,
       kb_id: values.kb_id || null,
@@ -209,19 +240,23 @@ function TicketDetailForm({ ticket, onDone }) {
             </select>
           </label>
           <label className="field">
-            <span className="field__label">Servicio</span>
+            <span className="field__label">
+              Servicio {(ticket.type === 'solicitud' || values.priority === 'alta') && <span className="req">*</span>}
+            </span>
             <select
               id="td-service"
               className="select"
               value={values.service}
               onChange={set('service')}
               disabled={!can('tickets:edit')}
+              aria-invalid={!!serviceError}
             >
               <option value="">— Sin especificar —</option>
               {SERVICES.map((s) => (
-                <option key={s.id} value={s.id}>{s.name}</option>
+                <option key={s.id} value={s.id}>{s.name} (SLA: {s.sla})</option>
               ))}
             </select>
+            {serviceError && <span className="field__error">{serviceError}</span>}
           </label>
         </div>
 
@@ -260,7 +295,12 @@ function TicketDetailForm({ ticket, onDone }) {
         </div>
 
         <label className="field">
-          <span className="field__label">Descripción</span>
+          <div className="field__head">
+            <span className="field__label">Descripción <span className="req">*</span></span>
+            <span className={`field__counter ${values.description.length > 900 ? 'field__counter--warn' : ''}`}>
+              {values.description.length}/1000
+            </span>
+          </div>
           <textarea
             id="td-description"
             className="textarea"
@@ -268,7 +308,9 @@ function TicketDetailForm({ ticket, onDone }) {
             onChange={set('description')}
             disabled={!can('tickets:edit')}
             maxLength={1000}
+            aria-invalid={!!descError}
           />
+          {descError && <span className="field__error">{descError}</span>}
         </label>
 
         {can('tickets:edit') && (
@@ -288,7 +330,7 @@ function TicketDetailForm({ ticket, onDone }) {
             <button
               type="submit"
               className="btn btn--primary"
-              disabled={!dirty || !!titleError}
+              disabled={!dirty || hasErrors}
               id="td-save"
             >
               Guardar cambios
