@@ -22,12 +22,39 @@ const EMPTY = {
 
 function validate(v) {
   const errors = {}
-  const title = v.title.trim()
-  if (!title) errors.title = 'El título es obligatorio.'
-  else if (title.length < 3) errors.title = 'Mínimo 3 caracteres.'
-  else if (title.length > 140) errors.title = 'Máximo 140 caracteres.'
-  if (v.type === 'solicitud' && !v.service) errors.service = 'Selecciona el servicio que solicitas.'
-  if (v.description.length > 1000) errors.description = 'Máximo 1000 caracteres.'
+  const title = (v.title || '').trim()
+  const description = (v.description || '').trim()
+
+  // Validación de Título
+  if (!title) {
+    errors.title = 'El título del ticket es obligatorio.'
+  } else if (title.length < 5) {
+    errors.title = 'El título debe ser más descriptivo (mínimo 5 caracteres).'
+  } else if (title.length > 140) {
+    errors.title = 'El título no puede superar los 140 caracteres.'
+  } else if (/^[0-9]+$/.test(title)) {
+    errors.title = 'El título no puede contener solo números.'
+  }
+
+  // Validación de Servicio
+  if (v.type === 'solicitud' && !v.service) {
+    errors.service = 'Debes seleccionar el servicio del catálogo solicitado.'
+  }
+
+  // Validación de Descripción
+  if (!description) {
+    errors.description = 'Ingresa una descripción del problema o necesidad (mínimo 10 caracteres).'
+  } else if (description.length < 10) {
+    errors.description = `Detalla un poco más el caso (${description.length}/10 caracteres mínimos).`
+  } else if (description.length > 1000) {
+    errors.description = 'La descripción supera el límite permitido de 1000 caracteres.'
+  }
+
+  // Validación de Prioridad Alta para Incidentes
+  if (v.priority === 'alta' && !v.service) {
+    errors.service = 'Para incidentes de prioridad Alta es obligatorio clasificar el servicio afectado.'
+  }
+
   return errors
 }
 
@@ -68,18 +95,23 @@ function NewTicketForm({ preset, onDone }) {
   async function handleSubmit(e) {
     e.preventDefault()
     setSubmitted(true)
-    if (Object.keys(errors).length) return
+    if (Object.keys(errors).length) {
+      showToast('Por favor completa todos los campos requeridos correctamente', 'error')
+      return
+    }
     try {
       const ticket = await mutateAsync({
         ...values,
-        author: user.name,
-        role: user.role,
+        title: values.title.trim(),
+        description: values.description.trim(),
+        author: user?.name || 'Usuario',
+        role: user?.role || 'usuario',
       })
       showToast(`Ticket ${ticket.id} creado correctamente`)
       onDone()
       navigate('/tablero')
-    } catch {
-      /* el error se muestra en el formulario */
+    } catch (err) {
+      showToast(`Error al crear el ticket: ${err.message}`, 'error')
     }
   }
 
@@ -108,14 +140,19 @@ function NewTicketForm({ preset, onDone }) {
       </div>
 
       <label className="field">
-        <span className="field__label">Título <span className="req">*</span></span>
+        <div className="field__head">
+          <span className="field__label">Título del Ticket <span className="req">*</span></span>
+          <span className={`field__counter ${values.title.length > 130 ? 'field__counter--danger' : ''}`}>
+            {values.title.length}/140
+          </span>
+        </div>
         <input
           id="nt-title"
           className="input"
           value={values.title}
           onChange={set('title')}
           onBlur={blur('title')}
-          placeholder="Ej. Error al conectar con la VPN corporativa"
+          placeholder="Ej. Error al conectar con la VPN corporativa desde casa"
           maxLength={140}
           autoFocus
           aria-invalid={!!show('title')}
@@ -148,7 +185,7 @@ function NewTicketForm({ preset, onDone }) {
       <div className="form__row">
         <label className="field">
           <span className="field__label">
-            Servicio {values.type === 'solicitud' && <span className="req">*</span>}
+            Servicio {(values.type === 'solicitud' || values.priority === 'alta') && <span className="req">*</span>}
           </span>
           <select
             id="nt-service"
@@ -158,9 +195,9 @@ function NewTicketForm({ preset, onDone }) {
             onBlur={blur('service')}
             aria-invalid={!!show('service')}
           >
-            <option value="">— Sin especificar —</option>
+            <option value="">— Seleccionar servicio —</option>
             {SERVICES.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
+              <option key={s.id} value={s.id}>{s.name} (SLA: {s.sla})</option>
             ))}
           </select>
           {show('service') && <span className="field__error">{errors.service}</span>}
@@ -215,17 +252,28 @@ function NewTicketForm({ preset, onDone }) {
       )}
 
       <label className="field">
-        <span className="field__label">Descripción</span>
+        <div className="field__head">
+          <span className="field__label">Descripción detallada <span className="req">*</span></span>
+          <span className={`field__counter ${values.description.length > 900 ? 'field__counter--warn' : ''} ${values.description.length >= 1000 ? 'field__counter--danger' : ''}`}>
+            {values.description.length}/1000
+          </span>
+        </div>
         <textarea
           id="nt-description"
           className="textarea"
           value={values.description}
           onChange={set('description')}
           onBlur={blur('description')}
-          placeholder="Qué pasó, desde cuándo, a quién afecta…"
+          placeholder="Describe detalladamente qué ocurrió, mensaje de error, hora del suceso o impacto en tus labores…"
           maxLength={1000}
+          aria-invalid={!!show('description')}
+          aria-describedby="nt-desc-err"
         />
-        <span className="field__hint">{values.description.length}/1000</span>
+        {show('description') ? (
+          <span className="field__error" id="nt-desc-err">{errors.description}</span>
+        ) : (
+          <span className="field__hint">Mínimo 10 caracteres. Proporciona contexto suficiente para el equipo de soporte.</span>
+        )}
       </label>
 
       {error && <p className="form__error" role="alert">No se pudo crear el ticket: {error.message}</p>}

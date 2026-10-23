@@ -72,7 +72,30 @@
 .select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--lime) 50%), linear-gradient(135deg, var(--lime) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: var(--space-8); }
 .input:hover, .select:hover, .textarea:hover { border-color: var(--gray-500); }
 .input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--lime); }
-.input[aria-invalid='true'], .textarea[aria-invalid='true'] { border-color: var(--danger); }
+.input[aria-invalid='true'], .select[aria-invalid='true'], .textarea[aria-invalid='true'] {
+  border-color: var(--danger);
+  background-color: rgba(255, 68, 68, 0.04);
+}
+
+.field__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field__counter {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.field__counter--warn {
+  color: var(--warning);
+}
+
+.field__counter--danger {
+  color: var(--danger);
+}
 .input::placeholder, .textarea::placeholder { color: #555; }
 
 /* Control segmentado (radio) */
