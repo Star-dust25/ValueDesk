@@ -20,6 +20,8 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { STATUSES, useSaveTickets, useTickets } from '../hooks/useTickets'
 import { useUIStore } from '../store/useUIStore'
+import { useCan } from '../lib/permissions'
+import { useSessionStore } from '../store/useSessionStore'
 import { serviceById } from '../data/services'
 import { timeAgo } from '../lib/time'
 import './TicketBoard.css'
@@ -66,10 +68,11 @@ function TicketCard({ ticket, dragging = false, overlay = false, ...rest }) {
   )
 }
 
-function SortableTicket({ ticket }) {
+function SortableTicket({ ticket, disabled = false }) {
   const openTicket = useUIStore((s) => s.openTicket)
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: ticket.id,
+    disabled,
   })
   return (
     <TicketCard
@@ -77,17 +80,20 @@ function SortableTicket({ ticket }) {
       dragging={isDragging}
       ref={setNodeRef}
       id={`ticket-${ticket.id}`}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        cursor: disabled ? 'pointer' : 'grab',
+      }}
       {...attributes}
-      {...listeners}
-      aria-roledescription="ticket arrastrable"
-      // Clic (sin arrastre) o Enter → abrir detalle. Espacio queda reservado para arrastrar.
+      {...(disabled ? {} : listeners)}
+      aria-roledescription={disabled ? 'ticket solo lectura' : 'ticket arrastrable'}
       onClick={() => openTicket(ticket.id)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           e.preventDefault()
           openTicket(ticket.id)
-        } else {
+        } else if (!disabled) {
           listeners?.onKeyDown?.(e)
         }
       }}
@@ -98,20 +104,24 @@ function SortableTicket({ ticket }) {
 /* ------------------------------------------------------------------ */
 /* Columna (droppable aunque esté vacía)                              */
 /* ------------------------------------------------------------------ */
-function Column({ status, tickets }) {
-  const { setNodeRef, isOver } = useDroppable({ id: status.id })
+function Column({ status, tickets, canEdit = true }) {
+  const { setNodeRef, isOver } = useDroppable({ id: status.id, disabled: !canEdit })
   return (
-    <section className={`column ${isOver ? 'is-over' : ''}`} aria-labelledby={`col-${status.id}`}>
+    <section className={`column ${isOver && canEdit ? 'is-over' : ''}`} aria-labelledby={`col-${status.id}`}>
       <header className="column__head">
         <h2 id={`col-${status.id}`} className="h3">{status.label}</h2>
         <span className="column__count">{tickets.length}</span>
       </header>
-      <SortableContext items={tickets.map((t) => t.id)} strategy={verticalListSortingStrategy}>
+      <SortableContext items={tickets.map((t) => t.id)} strategy={verticalListSortingStrategy} disabled={!canEdit}>
         <div ref={setNodeRef} className="column__list">
           {tickets.map((t) => (
-            <SortableTicket key={t.id} ticket={t} />
+            <SortableTicket key={t.id} ticket={t} disabled={!canEdit} />
           ))}
-          {tickets.length === 0 && <p className="column__empty">Suelta un ticket aquí</p>}
+          {tickets.length === 0 && (
+            <p className="column__empty">
+              {canEdit ? 'Suelta un ticket aquí' : 'Sin tickets en este estado'}
+            </p>
+          )}
         </div>
       </SortableContext>
     </section>
