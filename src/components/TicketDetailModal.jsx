@@ -69,8 +69,8 @@ function TicketDetailForm({ ticket, onDone }) {
     ? 'Máximo 1000 caracteres.'
     : null
 
-  const serviceError = (ticket.type === 'solicitud' || values.priority === 'alta') && !values.service
-    ? 'Debes seleccionar el servicio correspondiente.'
+  const serviceError = !values.service
+    ? 'Debes clasificar el servicio TI correspondiente para calcular el SLA.'
     : null
 
   const hasErrors = !!titleError || !!descError || !!serviceError
@@ -241,7 +241,7 @@ function TicketDetailForm({ ticket, onDone }) {
           </label>
           <label className="field">
             <span className="field__label">
-              Servicio {(ticket.type === 'solicitud' || values.priority === 'alta') && <span className="req">*</span>}
+              Servicio TI <span className="req">*</span>
             </span>
             <select
               id="td-service"

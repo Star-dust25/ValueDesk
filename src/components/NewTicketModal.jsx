@@ -36,9 +36,9 @@ function validate(v) {
     errors.title = 'El título no puede contener solo números.'
   }
 
-  // Validación de Servicio
-  if (v.type === 'solicitud' && !v.service) {
-    errors.service = 'Debes seleccionar el servicio del catálogo solicitado.'
+  // Validación de Servicio (100% obligatorio bajo estándar ITIL 4 para calcular SLA)
+  if (!v.service) {
+    errors.service = 'Selecciona el servicio afectado o solicitado para asignar el SLA.'
   }
 
   // Validación de Descripción
@@ -48,11 +48,6 @@ function validate(v) {
     errors.description = `Detalla un poco más el caso (${description.length}/10 caracteres mínimos).`
   } else if (description.length > 1000) {
     errors.description = 'La descripción supera el límite permitido de 1000 caracteres.'
-  }
-
-  // Validación de Prioridad Alta para Incidentes
-  if (v.priority === 'alta' && !v.service) {
-    errors.service = 'Para incidentes de prioridad Alta es obligatorio clasificar el servicio afectado.'
   }
 
   return errors
@@ -185,7 +180,7 @@ function NewTicketForm({ preset, onDone }) {
       <div className="form__row">
         <label className="field">
           <span className="field__label">
-            Servicio {(values.type === 'solicitud' || values.priority === 'alta') && <span className="req">*</span>}
+            Servicio TI <span className="req">*</span>
           </span>
           <select
             id="nt-service"
