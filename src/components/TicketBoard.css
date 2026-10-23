@@ -1,0 +1,73 @@
+/* ==========================================================
+   TicketBoard · Flat Kanban (Black + Lime)
+   Móvil: columnas apiladas · Tablet: 2 col · Laptop: 3 col
+   ========================================================== */
+.board { display: flex; flex-direction: column; gap: var(--space-6); }
+
+.board__toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); }
+
+.board__sync { font-size: 0.75rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: var(--space-2); }
+.board__right { display: flex; align-items: center; gap: var(--space-4); }
+.board__sync::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--lime); }
+.board__sync.is-saving::before { background: var(--warning); }
+
+.board__columns { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+@media (min-width: 640px) { .board__columns { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .board__columns { grid-template-columns: repeat(3, 1fr); } }
+
+/* --- Columna --- */
+.column {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color var(--t-fast);
+}
+.column.is-over { border-color: var(--lime); }
+.column__head { display: flex; align-items: center; justify-content: space-between; padding-bottom: var(--space-3); border-bottom: 1px solid var(--border); }
+.column__count { min-width: 28px; height: 28px; display: grid; place-items: center; border-radius: var(--radius); background: var(--lime); color: var(--black); font-weight: var(--fw-bold); font-size: 0.8125rem; }
+.column__list { display: flex; flex-direction: column; gap: var(--space-3); min-height: 120px; }
+.column__empty { flex: 1; display: grid; place-items: center; border: 1px dashed var(--border); border-radius: var(--radius); color: var(--text-muted); font-size: 0.8125rem; min-height: 100px; }
+
+/* --- Ticket --- */
+.ticket {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--black);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: var(--radius);
+  cursor: grab; touch-action: manipulation; user-select: none;
+  transition: border-color var(--t-fast);
+}
+.ticket:hover { border-color: var(--lime); }
+.ticket--alta { border-left-color: var(--danger); }
+.ticket--media { border-left-color: var(--warning); }
+.ticket--baja { border-left-color: var(--lime); }
+
+.ticket.is-dragging { opacity: 0.25; }
+/* Overlay: sin sombra (flat). Se distingue por color sólido y leve rotación. */
+.ticket.is-overlay { cursor: grabbing; background: var(--lime); color: var(--black); border-color: var(--lime); transform: rotate(2deg); }
+.ticket.is-overlay .ticket__id,
+.ticket.is-overlay .ticket__assignee,
+.ticket.is-overlay .tag--outline { color: var(--black); border-color: var(--black); }
+
+.ticket__head { display: flex; justify-content: space-between; align-items: center; }
+.ticket__id { font-size: 0.75rem; font-weight: var(--fw-semibold); color: var(--text-muted); letter-spacing: 0.04em; }
+.ticket__prio { font-size: 0.6875rem; font-weight: var(--fw-bold); text-transform: uppercase; letter-spacing: 0.08em; }
+.ticket__prio--alta { color: var(--danger); }
+.ticket__prio--media { color: var(--warning); }
+.ticket__prio--baja { color: var(--lime); }
+.is-overlay .ticket__prio { color: var(--black); }
+.ticket__title { font-size: 0.9375rem; font-weight: var(--fw-semibold); line-height: 1.35; }
+.ticket__service { font-size: 0.75rem; color: var(--lime); font-weight: var(--fw-semibold); }
+.is-overlay .ticket__service { color: var(--black); }
+.ticket__foot { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); }
+.ticket__assignee { font-size: 0.75rem; color: var(--text-muted); }
+
+/* --- Estados --- */
+.skeleton { height: 88px; border-radius: var(--radius); background: var(--gray-800); animation: pulse 1.2s ease-in-out infinite; }
+.skeleton--title { height: 28px; width: 50%; }
+@keyframes pulse { 50% { opacity: 0.4; } }
+.board__error { color: var(--danger); font-weight: var(--fw-semibold); }

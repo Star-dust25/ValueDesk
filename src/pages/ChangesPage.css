@@ -1,0 +1,204 @@
+/* ==========================================================
+   ChangesPage · Flat Change Enablement (Black + Lime)
+   ========================================================== */
+
+.changes-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .changes-head {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.changes-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .changes-toolbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.changes-search {
+  max-width: 360px;
+}
+
+.changes-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-bottom: var(--space-12);
+}
+
+.change-card {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-left: 4px solid var(--border);
+}
+
+.change-card:hover {
+  border-color: var(--lime);
+}
+
+.change-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.change-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.change-card__id {
+  font-weight: var(--fw-bold);
+  color: var(--lime);
+  font-size: 0.8125rem;
+}
+
+.change-card__title {
+  font-size: 1.125rem;
+  font-weight: var(--fw-semibold);
+}
+
+.change-card__desc {
+  font-size: 0.875rem;
+}
+
+.change-card__details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--gray-900);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 640px) {
+  .change-card__details {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.change-card__backout {
+  padding: var(--space-3);
+  background: #111;
+  border-left: 3px solid var(--warning);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.change-card__backout code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125rem;
+  color: #eee;
+}
+
+.change-card__actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+/* Tipos de cambio */
+.tag--type-estandar {
+  background: #222;
+  color: var(--white);
+  border: 1px solid var(--border);
+}
+
+.tag--type-normal {
+  background: var(--lime);
+  color: #000;
+}
+
+.tag--type-emergencia {
+  background: var(--danger);
+  color: #000;
+}
+
+/* Riesgo */
+.tag--risk-bajo {
+  color: var(--lime);
+  border: 1px solid var(--lime);
+  background: transparent;
+}
+
+.tag--risk-medio {
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  background: transparent;
+}
+
+.tag--risk-alto {
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  background: transparent;
+}
+
+/* Estados */
+.tag--chg-status-borrador {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+.tag--chg-status-pendiente {
+  background: var(--warning);
+  color: #000;
+}
+
+.tag--chg-status-aprobado {
+  background: var(--lime);
+  color: #000;
+}
+
+.tag--chg-status-implementado {
+  background: #2a2a2a;
+  color: var(--lime);
+  border: 1px solid var(--lime);
+}
+
+.tag--chg-status-rechazado {
+  background: var(--danger);
+  color: #000;
+}
+
+.changes-empty {
+  padding: var(--space-12) var(--space-6);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}

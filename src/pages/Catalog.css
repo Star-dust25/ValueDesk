@@ -1,0 +1,25 @@
+.catalog__toolbar { display: flex; flex-direction: column; gap: var(--space-4); }
+@media (min-width: 900px) { .catalog__toolbar { flex-direction: row; align-items: center; justify-content: space-between; } }
+
+.catalog__search { position: relative; display: block; width: 100%; max-width: 420px; color: var(--text-muted); }
+.catalog__search svg { position: absolute; left: var(--space-3); top: 50%; transform: translateY(-50%); pointer-events: none; }
+.catalog__search .input { padding-left: 2.5rem; }
+.catalog__search:focus-within { color: var(--lime); }
+
+.catalog__count { font-size: 0.8125rem; margin-block: var(--space-4); }
+.catalog__grid { padding-bottom: var(--space-12); }
+
+.service { display: flex; flex-direction: column; }
+.service .card__body { flex: 1; }
+.service__media { position: relative; }
+.service__badge { position: absolute; top: var(--space-3); right: var(--space-3); padding: 2px var(--space-2); background: var(--black); color: var(--lime); border: 1px solid var(--lime); border-radius: var(--radius); font-size: 0.75rem; font-weight: var(--fw-semibold); }
+.service__badge:hover { background: var(--lime); color: var(--black); }
+.service__tags { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.service__desc { font-size: 0.875rem; flex: 1; }
+.service__actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); margin-top: var(--space-2); }
+.service__actions .btn { padding: 0 var(--space-3); font-size: 0.8125rem; }
+
+.catalog__empty { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); padding: var(--space-8); margin-bottom: var(--space-12); border: 1px dashed var(--border); border-radius: var(--radius); }
+.catalog__empty-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -1,0 +1,64 @@
+/* ---------- Hero ---------- */
+.hero { display: grid; grid-template-columns: 1fr; gap: var(--space-8); padding-block: var(--space-8) var(--space-12); align-items: center; }
+.hero__copy { display: flex; flex-direction: column; gap: var(--space-4); }
+.hero__lead { max-width: 52ch; font-size: 1.0625rem; }
+.hero__actions { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-2); flex-wrap: wrap; }
+
+@media (min-width: 480px) { .hero__actions { flex-direction: row; } }
+@media (min-width: 1024px) {
+  .hero { grid-template-columns: 1.1fr 1fr; min-height: calc(100vh - var(--nav-h) - 40px); padding-block: var(--space-12); }
+}
+
+/* ---------- Escena 3D ---------- */
+.scene { position: relative; width: 100%; aspect-ratio: 1 / 1; max-height: 520px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--black); touch-action: pan-y; }
+.scene--loading { background: var(--gray-900); }
+.scene--fallback { display: grid; place-items: center; }
+.scene__diamond { width: 40%; aspect-ratio: 1; background: var(--lime); transform: rotate(45deg); }
+
+/* ---------- KPIs ---------- */
+.kpis { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--border); border-radius: var(--radius); }
+.kpi { padding: var(--space-6) var(--space-4); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kpi:nth-child(2n) { border-right: none; }
+.kpi:nth-last-child(-n + 2) { border-bottom: none; }
+.kpi dt { font-size: 0.75rem; font-weight: var(--fw-semibold); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.kpi dd { font-size: clamp(2rem, 6vw, 3rem); font-weight: var(--fw-bold); color: var(--lime); line-height: 1.1; }
+
+@media (min-width: 768px) {
+  .kpis { grid-template-columns: repeat(4, 1fr); }
+  .kpi { border-bottom: none; border-right: 1px solid var(--border); }
+  .kpi:nth-child(2n) { border-right: 1px solid var(--border); }
+  .kpi:last-child { border-right: none; }
+}
+
+.section__title { margin-block: var(--space-2) var(--space-8); }
+
+/* ---------- Tarjetas de Módulos ITIL 4 ---------- */
+.itil-card {
+  transition: border-color var(--t-fast), transform var(--t-fast);
+  display: flex;
+  flex-direction: column;
+}
+
+.itil-card:hover {
+  border-color: var(--lime);
+  transform: translateY(-2px);
+}
+
+.itil-card .card__body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.itil-card__title {
+  font-size: 1.125rem;
+  font-weight: var(--fw-semibold);
+}
+
+.itil-card__link {
+  margin-top: auto;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-bold);
+  padding-top: var(--space-2);
+}

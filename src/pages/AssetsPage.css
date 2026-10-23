@@ -1,0 +1,195 @@
+/* ==========================================================
+   AssetsPage · Flat CMDB Asset Management (Black + Lime)
+   ========================================================== */
+
+.assets-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .assets-head {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.assets-head__actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.assets-summary {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-6);
+}
+
+.summary-pill {
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.summary-pill--warning {
+  border-color: var(--warning);
+  color: var(--warning);
+  font-weight: var(--fw-semibold);
+}
+
+.assets-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .assets-toolbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.assets-search {
+  flex: 1;
+  max-width: 480px;
+}
+
+.assets-filters {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.assets-filters .select {
+  min-width: 150px;
+}
+
+/* Tabla Flat */
+.assets-table-card {
+  overflow: hidden;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.assets-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.assets-table th,
+.assets-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.assets-table th {
+  background: var(--black);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.assets-table tr:hover td {
+  background: rgba(198, 255, 51, 0.03);
+}
+
+.asset-id {
+  font-weight: var(--fw-bold);
+  color: var(--lime);
+}
+
+.asset-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.asset-cost {
+  font-family: ui-monospace, monospace;
+  font-weight: var(--fw-semibold);
+}
+
+.asset-edit-btn {
+  min-height: 32px;
+  padding: 0 var(--space-3);
+  font-size: 0.75rem;
+}
+
+.table-empty {
+  text-align: center;
+  padding: var(--space-8) !important;
+  color: var(--text-muted);
+}
+
+/* Badges de estado */
+.tag--status-en_uso {
+  background: var(--lime);
+  color: #000;
+}
+
+.tag--status-disponible {
+  background: #2a2a2a;
+  color: var(--white);
+  border: 1px solid var(--border);
+}
+
+.tag--status-en_reparacion {
+  background: var(--warning);
+  color: #000;
+}
+
+.tag--status-retirado {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+/* Badges de garantía */
+.warranty-badge {
+  font-size: 0.75rem;
+  font-weight: var(--fw-semibold);
+  padding: 2px 6px;
+  border-radius: var(--radius);
+}
+
+.warranty-badge--expired {
+  background: var(--danger);
+  color: #000;
+}
+
+.warranty-badge--soon {
+  background: var(--warning);
+  color: #000;
+}
+
+.warranty-badge--ok {
+  color: var(--text-muted);
+}
+
+.font-mono {
+  font-family: ui-monospace, monospace;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}

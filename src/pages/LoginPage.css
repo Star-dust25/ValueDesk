@@ -1,0 +1,148 @@
+/* ==========================================================
+   LoginPage · Flat Authentication (Black + Lime)
+   ========================================================== */
+
+.login-wrapper {
+  min-height: calc(100vh - var(--nav-h) - 80px);
+  display: flex;
+  align-items: center;
+  padding-block: var(--space-8);
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: 960px;
+}
+
+.login-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 600px;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--fw-bold);
+  font-size: 1.25rem;
+  margin-bottom: var(--space-2);
+}
+
+.login-brand__logo {
+  width: 20px;
+  height: 20px;
+  background: var(--lime);
+  transform: rotate(45deg);
+}
+
+.login-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .login-grid {
+    grid-template-columns: 1fr 1.2fr;
+  }
+}
+
+.login-form-card {
+  padding: var(--space-6);
+  border-top: 3px solid var(--lime);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-submit-btn {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.login-demo-accounts {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--surface);
+}
+
+.login-demo-accounts__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.accounts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.account-item {
+  padding: var(--space-3) var(--space-4);
+  background: var(--black);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: border-color var(--t-fast), transform var(--t-fast);
+}
+
+.account-item:hover,
+.account-item:focus-visible {
+  border-color: var(--lime);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.account-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.account-item__name {
+  font-weight: var(--fw-bold);
+  font-size: 0.9375rem;
+  margin-right: var(--space-2);
+}
+
+.account-item__tag {
+  background: var(--lime);
+  color: var(--black);
+}
+
+.account-item__desc {
+  line-height: 1.4;
+}
+
+.account-item__creds {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--border);
+}
+
+.account-item__creds code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--lime);
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}

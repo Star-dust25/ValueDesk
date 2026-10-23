@@ -1,0 +1,325 @@
+/* ==========================================================
+   MetricsPage · Flat ITSM Dashboard (Black + Lime)
+   ========================================================== */
+
+.metrics-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .metrics-head {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.metrics-kpis {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+@media (min-width: 640px) {
+  .metrics-kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .metrics-kpis {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--lime);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.metric-card__label {
+  font-size: 0.75rem;
+  font-weight: var(--fw-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metric-card__value {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: var(--fw-bold);
+  line-height: 1.05;
+}
+
+.metric-card__hint {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: 1.4fr 1fr;
+  }
+  .metrics-grid--split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.metrics-panel {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.metrics-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.metrics-panel__title {
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.metrics-legend {
+  display: flex;
+  gap: var(--space-4);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.legend-dot--created {
+  background: var(--gray-800);
+  border: 1px solid var(--border);
+}
+
+.legend-dot--resolved {
+  background: var(--lime);
+}
+
+/* Gráfico de barras flat */
+.trend-bars {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-2);
+  height: 180px;
+  padding-top: var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.trend-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.trend-bars-pair {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  width: 100%;
+  max-width: 44px;
+  height: 140px;
+}
+
+.trend-bar {
+  flex: 1;
+  min-height: 4px;
+  border-radius: 2px 2px 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 2px;
+  transition: opacity var(--t-fast);
+}
+
+.trend-bar--created {
+  background: #2a2a2a;
+  border: 1px solid var(--border);
+}
+
+.trend-bar--resolved {
+  background: var(--lime);
+}
+
+.trend-bar__num {
+  font-size: 0.625rem;
+  font-weight: var(--fw-bold);
+  color: var(--black);
+}
+
+.trend-bar--created .trend-bar__num {
+  color: var(--white);
+}
+
+.trend-col__label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+/* Lista de tickets en riesgo */
+.risk-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.risk-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--black);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.risk-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.risk-item__id {
+  font-size: 0.75rem;
+  font-weight: var(--fw-bold);
+  color: var(--lime);
+}
+
+.risk-item__title {
+  font-size: 0.875rem;
+  font-weight: var(--fw-semibold);
+}
+
+.risk-item__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.risk-item__btn {
+  min-height: 32px;
+  padding: 0 var(--space-3);
+  font-size: 0.75rem;
+}
+
+/* Desglose de demanda */
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.breakdown-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.breakdown-row__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--gray-800);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--lime);
+}
+
+/* Mini estadísticas de activos */
+.asset-mini-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.mini-stat {
+  padding: var(--space-3);
+  background: var(--black);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mini-stat__num {
+  font-size: 1.5rem;
+  font-weight: var(--fw-bold);
+}
+
+.tag--danger {
+  background: var(--danger);
+  color: #000;
+}
+
+.tag--warning {
+  background: var(--warning);
+  color: #000;
+}
+
+.text-danger {
+  color: var(--danger) !important;
+}
+
+.text-warning {
+  color: var(--warning) !important;
+}
+
+.metrics-empty {
+  padding: var(--space-6);
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
